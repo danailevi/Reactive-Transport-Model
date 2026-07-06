@@ -99,7 +99,7 @@ Kinetics 1-10
     Ureolysis
          -m0 100  
         -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
-        -parms 7.0e-5 0.0173*0.6 #[Rmax] [Km]
+        -parms 7.0e-5 0.0173 #[Rmax] [Km]
     Calcite
         -m0   0# mol/L
         -parms 1.55e-6 .501 
