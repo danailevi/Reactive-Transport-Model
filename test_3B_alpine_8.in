@@ -1,0 +1,101 @@
+#-------------------------------------------
+SOLUTION_MASTER_SPECIES
+    Urea Urea  0 CO(NH2)2 60.06
+
+SOLUTION_SPECIES
+    Urea = Urea
+            log_k  0
+            Vm  14.5
+    Cl- + H+ = HCl
+            log_k   0.7
+            delta_h 0       kcal
+            -gamma  0       0.06
+    Cl- + Ca+2 = CaCl+
+            log_k   0.3
+            delta_h 0       kcal
+            -gamma  0       0.06
+    2Cl- + Ca+2 = CaCl2
+            log_k   .66
+            delta_h 0       kcal
+            -gamma  0       0.06
+
+RATES
+Ureolysis
+-START
+11 cell_l = 5.2
+12 t_d = 288000
+13 Ea = 31200
+14 Tref = 298.15
+15 initial_por = .38
+16 Cb = (5.66e-1*(cell_no*cell_l-cell_l/2)^3+1.1e2*(cell_no*cell_l-cell_l/2)^2+4.67e3*(cell_no*cell_l-cell_l/2)-5.62e3)/1e6
+17 Tfactor = exp(-Ea/8.314*(1/(TC+273.15)-1/Tref))
+18 decay_ratio = exp(-TOTAL_TIME/t_d)
+20 rate = Cb*soln_vol*get_por(cell_no)/initial_por*PARM(1)*Tfactor*MOL("Urea")/(MOL("Urea")+PARM(2))
+30 moles = rate * TIME * decay_ratio
+40 save moles
+-END
+
+Calcite
+-START
+20 initial_por = .38
+21 V_cell = 102
+22 d_calcite = 36.9
+23 pow_a = 2
+25 A0 = 1.
+70 Area = A0 * (initial_por/get_por(cell_no))^pow_a * soln_vol
+80 rate = Area * (parm(1) + parm(2)*act("H+")) * (1-10^SI("Calcite"))
+100 moles = rate * TIME * get_por(cell_no)/initial_por
+110 change_por(initial_por - d_calcite*kin("Calcite")/V_cell,cell_no)
+200 SAVE moles
+-END
+
+SOLUTION 0
+Urea .05
+Amm .0567
+Ca .05
+Cl .1567
+C .0038 as Ca Calcite 0.0
+Na .0038
+-units  mol/kgw
+-pH     7       charge_balance
+-temp   8
+water 38.7e-3
+END
+
+SOLUTION 1-10
+     -units     mol/kgw
+     -pH        7       charge_balance
+     -temp      8
+     water 38.7e-3
+END
+
+Kinetics 1-10
+    Ureolysis
+         -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7.0e-5 0.0173
+    Calcite
+        -m0   0
+        -parms 1.55e-6 .501
+END
+
+TRANSPORT
+   cells 10
+   shifts 178
+   time_step 1055
+   flow_direction forward
+   boundary_conditions flux constant
+   length 0.052
+   diffusion_coefficient 1.0e-9
+   porosities 10*.38
+   -dispersivities 10*.01
+
+SELECTED_OUTPUT
+    -step    true
+    -soln   true
+    -time   true
+    -pH true
+    -tot  Ca  Urea Amm
+    -si Calcite
+    -k Ureolysis Calcite
+END
