@@ -51,8 +51,8 @@ Ureolysis
 -START
 11 cell_l = 5.2         # cell length, cm
 12 t_d    = 288000*1.2      # biomass decay constant, s
-15 initial_por = .38    # initial porosity ε₀
-16 Cb = (5.66e-1*(cell_no*cell_l-cell_l/2)^3+1.1e2*(cell_no*cell_l-cell_l/2)^2+4.67e3*(cell_no*cell_l-cell_l/2)-5.62e3)/1e6 # OD, attached biomass profile
+15 initial_por = .37    # initial porosity ε₀ (silty sand, SM)
+16 Cb = (5.66e-1*(cell_no*cell_l-cell_l/2)^3+1.1e2*(cell_no*cell_l-cell_l/2)^2+4.67e3*(cell_no*cell_l-cell_l/2)-5.62e3)/1e6 # OD, attached biomass profile; cubic fit to Razbani et al. 2025 Fig.2 data, only measured over 0-52cm - extrapolated (unbounded) for cells beyond cell 10
 18 decay_ratio = exp(-TOTAL_TIME/t_d)
 20 rate = Cb*soln_vol*get_por(cell_no)/initial_por*PARM(1)*MOL("Urea")/(MOL("Urea")+PARM(2))
 30 moles = rate * TIME * decay_ratio # * get_por(cell_no)/initial_por
@@ -63,7 +63,7 @@ Ureolysis
 
 Calcite
 -START
-20 initial_por = .38
+20 initial_por = .37 # silty sand (SM)
 21 V_cell = 102 # ml
 22 d_calcite = 36.9 # cm³/mol
 23 pow_a = 2
@@ -78,43 +78,43 @@ Calcite
 #-------------------------------------------------------------------------------
 
 SOLUTION 0
-Urea .05
+Urea 1.015
 Amm .0567
-Ca 0.05
-Cl .1567
+Ca 2
+Cl 4.0567
 C .0038 as Ca Calcite 0.0
 Na .0038
--units 	mol/kgw
--pH 	7	charge_balance
+-units mol/kgw
+-pH   7  charge_balance
 water 38.7e-3 # kg
 END
 
-SOLUTION 1-10
-     -units 	mol/kgw
-     -pH 	7	charge_balance
-     water 38.7e-3 # kg
+SOLUTION 1-19
+    -units    mol/kgw
+    -pH   7  charge_balance
+    water 38.7e-3 # kg
 END
 
-Kinetics 1-10 
+Kinetics 1-19
     Ureolysis
-         -m0 100  
+         -m0 100
         -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
         -parms 7.0e-5 0.0173 #[Rmax] [Km]
     Calcite
         -m0   0# mol/L
-        -parms 1.55e-6 .501 
+        -parms 1.55e-6 .501
 END
 
-TRANSPORT 
-   cells 10
-   shifts 178 # 50 h
+TRANSPORT
+   cells 19 # 19*5.2cm = 98.8cm, extended from the 52cm/10-cell calibrated column
+   shifts 338 # ~99 h; scaled from 178 to preserve pore-volumes-through-column ratio
    time_step 1055 seconds # 16 min
    flow_direction forward
-   boundary_conditions flux constant 
+   boundary_conditions flux constant
    length 0.052
-   diffusion_coefficient 1.0e-9
-   porosities 10*.38
-   -dispersivities 10*.01
+   diffusion_coefficient 2.7e-10 # tortuosity-corrected, Millington-Quirk: D0*n^(4/3), n=.37
+   porosities 19*.37
+   -dispersivities 19*.005 # ~10-100x d50 (0.15 mm) for silty sand, Bear 1972
 
 USER_PUNCH
 headings por 
@@ -146,25 +146,25 @@ table = pd.DataFrame(output[1:], columns=output[0])
 print("\n")
 print(table)
 
-n_cells = 10  # total number of cells
+n_cells = 19  # total number of cells
 V_cell = 102e-3  # l
 t_step = 1055  # time steps
-shift_m = 178
+shift_m = 338
 row_0 = 12  # cell number
 t = table.loc[4:]["time"]
 C_u_0 = 0.05  # initial urea concentration molar
 C_ca_0 = 0.05  # initial calcium concentration molar
-por_0 = 0.38  # initial porosity
+por_0 = 0.37  # initial porosity (silty sand, SM)
 l_cell = 5.2  # cm
 
-final = table[table["step"] == 178]
-final = final[(final["soln"] >= 1) & (final["soln"] <= 10)].sort_values("soln")
+final = table[table["step"] == shift_m]
+final = final[(final["soln"] >= 1) & (final["soln"] <= n_cells)].sort_values("soln")
 
-heights = np.arange(1, n_cells + 1) * l_cell - l_cell / 2   # cell centres (cm)
+heights = np.arange(1, n_cells + 1) * l_cell - l_cell / 2   # cell centres (cm); cell 1 = bottom (injection), cell n_cells = top (outlet), per Razbani et al. 2025: cementation solution injected bottom-to-top, node 0 = first node from the bottom
 calcite = final["k_Calcite"].values / V_cell                # mol/L
 
 final.to_csv(
-    "T3B_calcite_shift178.csv", 
+    f"T3B_calcite_shift{shift_m}.csv",
     index=False
 )
 
@@ -172,8 +172,8 @@ fig, ax = plt.subplots()
 ax.plot(calcite, heights, "ko", label="Simulation", ms=8)
 ax.set_xlabel("Calcite precipitation (mol/L)")
 ax.set_ylabel("Column height (cm)")
-ax.set_xlim(0, 0.6)
-ax.set_ylim(0, 52)
+ax.set_xlim(0, 7)
+ax.set_ylim(0, n_cells * l_cell)
 ax.grid()
 ax.legend()
 

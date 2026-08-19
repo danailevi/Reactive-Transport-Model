@@ -8,7 +8,7 @@ import subprocess
 import pandas as pd
 import matplotlib.pyplot as plt
 
-PHREEQC = "/mnt/c/home/cacchina_fra/iGEM/phreeqc_install/bin/phreeqc"
+PHREEQC = r"C:\Program Files\USGS\phreeqc-3.8.6-17100-x64\bin\phreeqc.bat"
 
 with open("test_3B.in", "r") as f:
     template = f.read()
@@ -71,9 +71,9 @@ results_df.to_csv("alpine_sweep_results.csv", index=False)
 
 fig, ax = plt.subplots(figsize=(6, 4.5))
 ax.plot(results_df["T"], results_df["total_calcite_mol"], "o-", color="tab:blue")
-ax.set_xlabel("Temperatura (°C)")
-ax.set_ylabel("Calcite totale precipitata a fine simulazione (mol)")
-ax.set_title("Effetto della temperatura sulla cementazione totale\n(Ea=31.2 kJ/mol, Wang 2023)")
+ax.set_xlabel("Temperature (°C)")
+ax.set_ylabel("Total calcite precipitation at the end of simulation (mol)")
+ax.set_title("Effect of Temperature on Total Cementation\n(Ea=31.2 kJ/mol, Wang 2023)")
 ax.grid(alpha=0.3)
 fig.tight_layout()
 fig.savefig("alpine_temperature_sweep.png", dpi=150)
