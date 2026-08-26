@@ -1,0 +1,592 @@
+SOLUTION_MASTER_SPECIES
+    Urea Urea  0 CO(NH2)2 60.06
+
+SOLUTION_SPECIES
+    Urea = Urea
+            log_k  0
+            Vm  14.5
+    Cl- + H+ = HCl
+            log_k   0.7
+            delta_h 0       kcal
+            -gamma  0       0.06
+    Cl- + Ca+2 = CaCl+
+            log_k   0.3
+            delta_h 0       kcal
+            -gamma  0       0.06
+    2Cl- + Ca+2 = CaCl2
+            log_k   .66
+            delta_h 0       kcal
+            -gamma  0       0.06
+
+RATES
+Ureolysis
+-START
+10 rate = PARM(3)*soln_vol*PARM(1)*MOL("Urea")/(MOL("Urea")+PARM(2))
+20 moles = rate * TIME
+30 SAVE moles
+-END
+
+Calcite
+-START
+10 rate = PARM(3)*(PARM(1)+PARM(2)*act("H+"))*(1-10^SI("Calcite"))
+20 moles = rate * TIME
+30 SAVE moles
+-END
+
+SELECTED_OUTPUT
+    -step true
+    -soln true
+    -pH true
+    -tot Ca Urea Amm C
+    -k Ureolysis Calcite
+END
+
+SOLUTION 1
+Urea 4.302996e-04
+Amm 7.812316e-04
+Ca 3.913204e-04
+Cl 0.000000e+00
+C 8.458960e-07
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 1
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 0.000000e+00
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 2
+Urea 4.452913e-03
+Amm 6.418415e-03
+Ca 4.263731e-03
+Cl 0.000000e+00
+C 1.825109e-04
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 2
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 2.365800e-05
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 3
+Urea 5.000000e-02
+Amm 5.670000e-02
+Ca 5.000000e-02
+Cl 1.567000e-01
+C 3.800000e-03
+Na 3.800000e-03
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 3
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 1.189800e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 4
+Urea 4.445194e-03
+Amm 6.433854e-03
+Ca 4.257371e-03
+Cl 0.000000e+00
+C 1.838725e-04
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 4
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 1.426700e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 5
+Urea 3.930500e-04
+Amm 8.557308e-04
+Ca 3.640412e-04
+Cl 0.000000e+00
+C 1.081709e-05
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 5
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 1.439800e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 6
+Urea 1.588126e-03
+Amm 3.570384e-03
+Ca 1.430374e-03
+Cl 0.000000e+00
+C 5.881582e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 6
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 1.506500e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 7
+Urea 9.729697e-03
+Amm 1.615793e-02
+Ca 9.052025e-03
+Cl 0.000000e+00
+C 1.862413e-04
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 7
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 1.877300e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 8
+Urea 3.126983e-02
+Amm 4.336649e-02
+Ca 2.984200e-02
+Cl 0.000000e+00
+C 1.140877e-03
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 8
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 2.865900e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 9
+Urea 9.712312e-03
+Amm 1.619269e-02
+Ca 9.036055e-03
+Cl 0.000000e+00
+C 1.876078e-04
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 9
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 3.236900e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 10
+Urea 1.524982e-03
+Amm 3.696583e-03
+Ca 1.377339e-03
+Cl 0.000000e+00
+C 1.596032e-05
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 10
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 3.304500e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 11
+Urea 2.837154e-03
+Amm 7.902172e-03
+Ca 2.517208e-03
+Cl 0.000000e+00
+C 9.358800e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 11
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 3.419500e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 12
+Urea 1.018816e-02
+Amm 2.138520e-02
+Ca 9.182576e-03
+Cl 0.000000e+00
+C 7.353078e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 12
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 3.728600e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 13
+Urea 2.109921e-02
+Amm 3.767414e-02
+Ca 1.916879e-02
+Cl 0.000000e+00
+C 6.743592e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 13
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 4.192000e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 14
+Urea 1.016930e-02
+Amm 2.142267e-02
+Ca 9.163816e-03
+Cl 0.000000e+00
+C 7.366294e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 14
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 4.494100e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 15
+Urea 2.792372e-03
+Amm 7.991568e-03
+Ca 2.472614e-03
+Cl 0.000000e+00
+C 9.514886e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 15
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 4.588600e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 16
+Urea 3.600638e-03
+Amm 1.243146e-02
+Ca 3.132888e-03
+Cl 0.000000e+00
+C 8.438142e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 16
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 4.678700e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 17
+Urea 9.121588e-03
+Amm 2.452162e-02
+Ca 8.091666e-03
+Cl 0.000000e+00
+C 7.272934e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 17
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 4.746900e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 18
+Urea 1.499454e-02
+Amm 3.523586e-02
+Ca 1.341978e-02
+Cl 0.000000e+00
+C 6.877722e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 18
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 5.047400e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 19
+Urea 9.104646e-03
+Amm 2.455547e-02
+Ca 8.074730e-03
+Cl 0.000000e+00
+C 7.275542e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 19
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 4.126500e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 20
+Urea 3.567740e-03
+Amm 1.249704e-02
+Ca 3.100034e-03
+Cl 0.000000e+00
+C 8.490260e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 20
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 4.166800e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 21
+Urea 3.848916e-03
+Amm 1.641976e-02
+Ca 3.272164e-03
+Cl 0.000000e+00
+C 8.223488e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 21
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 4.120400e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 22
+Urea 7.669706e-03
+Amm 2.647758e-02
+Ca 6.662852e-03
+Cl 0.000000e+00
+C 7.365012e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 22
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 3.984500e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 23
+Urea 1.098258e-02
+Amm 3.401224e-02
+Ca 9.632176e-03
+Cl 0.000000e+00
+C 7.060344e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 23
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 3.186100e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 24
+Urea 7.656000e-03
+Amm 2.650536e-02
+Ca 6.649070e-03
+Cl 0.000000e+00
+C 7.371076e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 24
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 3.059000e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step
+
+SOLUTION 25
+Urea 3.824752e-03
+Amm 1.646806e-02
+Ca 3.247988e-03
+Cl 0.000000e+00
+C 8.227330e-06
+Na 0.000000e+00
+-units mol/kgw
+-pH 7 charge_balance
+water 38.7e-3
+END
+
+KINETICS 25
+    Ureolysis
+        -m0 100
+        -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
+        -parms 7e-05 0.0173 0.03
+    Calcite
+        -m0 2.936200e-04
+        -parms 1.55e-06 0.501 1.0
+-steps 1055 seconds in 1 step

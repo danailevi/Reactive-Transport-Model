@@ -69,12 +69,47 @@ for T in range(4, 11):
 results_df = pd.DataFrame(results)
 results_df.to_csv("alpine_sweep_results.csv", index=False)
 
-fig, ax = plt.subplots(figsize=(6, 4.5))
-ax.plot(results_df["T"], results_df["total_calcite_mol"], "o-", color="tab:blue")
-ax.set_xlabel("Temperature (°C)")
-ax.set_ylabel("Total calcite precipitation at the end of simulation (mol)")
-ax.set_title("Effect of Temperature on Total Cementation\n(Ea=31.2 kJ/mol, Wang 2023)")
-ax.grid(alpha=0.3)
-fig.tight_layout()
-fig.savefig("alpine_temperature_sweep.png", dpi=150)
+BLUE_LINE   = "#2a78d6"   # sequential step 450
+BLUE_FILL   = "#cde2fb"   # sequential step 100
+INK_PRIMARY = "#0b0b0b"
+INK_SECOND  = "#52514e"
+INK_MUTED   = "#898781"
+GRID        = "#e1e0d9"
+SURFACE     = "#fcfcfb"
+
+plt.rcParams["font.family"] = ["Segoe UI", "DejaVu Sans", "sans-serif"]
+
+fig, ax = plt.subplots(figsize=(7.2, 6.4), dpi=200)
+fig.patch.set_facecolor(SURFACE)
+ax.set_facecolor(SURFACE)
+
+x = results_df["T"]
+y = results_df["total_calcite_mol"]
+
+ax.fill_between(x, 0, y, color=BLUE_FILL, zorder=1)
+ax.plot(x, y, "-", color=BLUE_LINE, lw=2.4, zorder=2)
+ax.plot(x, y, "o", color=BLUE_LINE, ms=9,
+        markeredgecolor=SURFACE, markeredgewidth=1.6, zorder=3)
+
+ax.set_xlim(x.min(), x.max())
+ax.set_ylim(0, y.max() * 1.15)
+
+ax.set_xlabel("Temperature (°C)", fontsize=12, color=INK_SECOND, labelpad=10)
+ax.set_ylabel("Total calcite precipitation (mol)", fontsize=12, color=INK_SECOND, labelpad=10)
+ax.tick_params(colors=INK_MUTED, labelsize=10.5, length=0)
+
+ax.grid(True, color=GRID, lw=1, zorder=0)
+for spine in ("top", "right"):
+    ax.spines[spine].set_visible(False)
+for spine in ("left", "bottom"):
+    ax.spines[spine].set_color(GRID)
+    ax.spines[spine].set_linewidth(1.2)
+
+fig.suptitle("Effect of Temperature on Total Cementation", fontsize=17, fontweight="bold",
+             color=INK_PRIMARY, x=0.065, ha="left", y=0.975)
+ax.set_title("Alpine-range sweep, Arrhenius-corrected Rₘₐₓ (Ea=31.2 kJ/mol, Wang 2023)",
+             fontsize=11.5, color=INK_MUTED, loc="left", pad=14)
+
+plt.tight_layout(rect=[0, 0, 1, 0.94])
+fig.savefig("alpine_temperature_sweep.png", dpi=300, facecolor=SURFACE)
 print("saved alpine_temperature_sweep.png")

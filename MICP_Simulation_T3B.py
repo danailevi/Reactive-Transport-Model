@@ -89,13 +89,13 @@ Na .0038
 water 38.7e-3 # kg
 END
 
-SOLUTION 1-19
+SOLUTION 1-10
     -units    mol/kgw
     -pH   7  charge_balance
     water 38.7e-3 # kg
 END
 
-Kinetics 1-19
+Kinetics 1-10
     Ureolysis
          -m0 100
         -formula AmmH+ 2 CO3-2 1 Urea -1 H2O -2
@@ -106,15 +106,15 @@ Kinetics 1-19
 END
 
 TRANSPORT
-   cells 19 # 19*5.2cm = 98.8cm, extended from the 52cm/10-cell calibrated column
-   shifts 338 # ~99 h; scaled from 178 to preserve pore-volumes-through-column ratio
+   cells 10 # 10*5.2cm = 52cm, the calibrated column (biomass profile only valid over this range)
+   shifts 178 # 50 h
    time_step 1055 seconds # 16 min
    flow_direction forward
    boundary_conditions flux constant
    length 0.052
    diffusion_coefficient 2.7e-10 # tortuosity-corrected, Millington-Quirk: D0*n^(4/3), n=.37
-   porosities 19*.37
-   -dispersivities 19*.005 # ~10-100x d50 (0.15 mm) for silty sand, Bear 1972
+   porosities 10*.37
+   -dispersivities 10*.005 # ~10-100x d50 (0.15 mm) for silty sand, Bear 1972
 
 USER_PUNCH
 headings por 
@@ -146,10 +146,10 @@ table = pd.DataFrame(output[1:], columns=output[0])
 print("\n")
 print(table)
 
-n_cells = 19  # total number of cells
+n_cells = 10  # total number of cells
 V_cell = 102e-3  # l
 t_step = 1055  # time steps
-shift_m = 338
+shift_m = 178
 row_0 = 12  # cell number
 t = table.loc[4:]["time"]
 C_u_0 = 0.05  # initial urea concentration molar
@@ -172,7 +172,7 @@ fig, ax = plt.subplots()
 ax.plot(calcite, heights, "ko", label="Simulation", ms=8)
 ax.set_xlabel("Calcite precipitation (mol/L)")
 ax.set_ylabel("Column height (cm)")
-ax.set_xlim(0, 7)
+ax.set_xlim(0, 2.1)
 ax.set_ylim(0, n_cells * l_cell)
 ax.grid()
 ax.legend()
