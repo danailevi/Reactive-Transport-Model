@@ -78,16 +78,14 @@ Calcite
 #-------------------------------------------------------------------------------
 
 SOLUTION 0
-Urea 1.015
-Amm .0567
-Ca 2
-Cl 4.0567
-C .0038 as Ca Calcite 0.0
-Na .0038
--units mol/kgw
--pH   7  charge_balance
-water 38.7e-3 # kg
-END
+    Urea 1.0
+    Ca 1.0
+    Cl 2.0
+    C .0038 as Ca Calcite 0.0
+    Na .0038
+    -units mol/kgw
+    -pH 7 charge_balance
+    water 38.7e-3
 
 SOLUTION 1-10
     -units    mol/kgw
@@ -146,7 +144,7 @@ table = pd.DataFrame(output[1:], columns=output[0])
 print("\n")
 print(table)
 
-n_cells = 10  # total number of cells
+n_cells = 30  # total number of cells
 V_cell = 102e-3  # l
 t_step = 1055  # time steps
 shift_m = 178
@@ -155,27 +153,38 @@ t = table.loc[4:]["time"]
 C_u_0 = 0.05  # initial urea concentration molar
 C_ca_0 = 0.05  # initial calcium concentration molar
 por_0 = 0.37  # initial porosity (silty sand, SM)
-l_cell = 5.2  # cm
+l_cell = 5.0  # cm
 
 final = table[table["step"] == shift_m]
 final = final[(final["soln"] >= 1) & (final["soln"] <= n_cells)].sort_values("soln")
-
-heights = np.arange(1, n_cells + 1) * l_cell - l_cell / 2   # cell centres (cm); cell 1 = bottom (injection), cell n_cells = top (outlet), per Razbani et al. 2025: cementation solution injected bottom-to-top, node 0 = first node from the bottom
-calcite = final["k_Calcite"].values / V_cell                # mol/L
 
 final.to_csv(
     f"T3B_calcite_shift{shift_m}.csv",
     index=False
 )
 
-fig, ax = plt.subplots()
-ax.plot(calcite, heights, "ko", label="Simulation", ms=8)
-ax.set_xlabel("Calcite precipitation (mol/L)")
-ax.set_ylabel("Column height (cm)")
-ax.set_xlim(0, 2.1)
-ax.set_ylim(0, n_cells * l_cell)
-ax.grid()
-ax.legend()
+# --- model curve (your existing lines) ---
+heights = np.arange(1, n_cells + 1) * l_cell - l_cell / 2   # cm from inlet
+calcite = final["k_Calcite"].values / V_cell                # mol/L
 
+# --- U5 experimental target ---
+u5 = pd.read_csv("U5_depth_averaged.csv")                   # your 14-row CSV
+u5["calcite_molL"] = u5["CCC_areaweighted_pct"] * 0.156     # CCC% -> mol/L bulk
+
+# coordinate alignment: U5 depth-from-top  ->  distance-from-inlet
+# inlet (cell 1) is bottom of model; U5 top = effective source.
+u5["dist_from_source_cm"] = u5["depth_from_top_cm"]         # already same sense
+# if your model inlet is physically the BOTTOM and you want to plot on the
+# same 'height from inlet' axis as `heights`, flip instead:
+# u5["dist_from_source_cm"] = (150.0 - u5["depth_from_top_cm"])
+
+fig, ax = plt.subplots()
+ax.plot(calcite, heights, "ko-", label="Simulation", ms=6)
+ax.plot(u5["calcite_molL"], u5["dist_from_source_cm"], "r^-", label="U5 (area-weighted)", ms=6)
+ax.set_xlabel("Calcite (mol/L)")
+ax.set_ylabel("Distance from inlet (cm)")
+ax.legend()
+ax.grid()
+plt.show()
 
 plt.show()
