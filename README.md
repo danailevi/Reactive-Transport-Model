@@ -130,7 +130,6 @@ AmmH+ = Amm + H+
     -analytic 0.6322 -0.001225 -2835.76
 ```
 This resolved the "Model failed to converge" error we were getting every time.
-
 ## Useful literature for the temperature adaptation
 
 - No $E_a$ published specifically for *S. pasteurii*. Reasonable proxy: jack bean urease, $E_a \approx 24$ kJ/mol (range 18–35 kJ/mol across various studies). Our alpine sweeps additionally compare two MICP-specific estimates: Wang et al. (2023), $E_a \approx 31.2$ kJ/mol, and Sun et al. (2019), $E_a \approx 51.7$ kJ/mol.
