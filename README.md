@@ -16,7 +16,7 @@ Full write-up: [iGEM UZH Wiki — Reactive Transport Model](https://2026.igem.wi
 | `concentration variation/` | Urea and CaCl₂ concentration sweeps, and an initial-pH sweep. |
 | `alpine temperature/` | Low-temperature (4–10°C) adaptation: Arrhenius correction on `R_max`, temperature-dependent biomass survival, and literature comparison. |
 | `biomass/` | Mechanistic (colloid filtration theory) refit of the attached-biomass profile, as an alternative to the original cubic fit. |
-| `2D prototype/` | Early 2D extension of the model (PHREEQC input decks only, stepped manually). |
+| `2D prototype/` | Proof-of-concept 2D extension on a 5×5 grid: Python moves the liquid between cells, PHREEQC does the chemistry in each cell. `prototype_2d.py` (v1) and `prototype_2d_v2.py` (v2: temperature and pH factors), with their figures. The `*_step*.in` files are generated PHREEQC inputs, one per cell batch and time step. |
 
 ## Requirements
 
@@ -34,6 +34,20 @@ cd "Sensitivity"
 python MICP_Simulation_T3B_Cb_sensitivity.py
 ```
 Scripts that reference the root-level `test_3A.in`/`test_3B.in`/`phreeqc.dat` (anything that shells out to `phreeqc.bat`) do so via a relative `..\` path — this only works with backslashes, since `phreeqc.bat`'s internal `copy` step doesn't resolve forward-slash `../` paths correctly on Windows. Each script writes its own output (`.csv`, `.png`) into its own folder.
+
+## 2D prototype
+
+The 2D scripts drive the PHREEQC command-line program, once per time step. Run them from inside `2D prototype/`:
+```
+cd "2D prototype"
+python prototype_2d.py
+python prototype_2d_v2.py
+```
+- The PHREEQC command defaults to `phreeqc.bat` on Windows and `phreeqc` elsewhere. Set the `PHREEQC` environment variable to override it.
+- The database is the patched `../phreeqc.dat` from the repository root.
+- v1 runs 20 time steps × 25 cells (500 PHREEQC reactions) and writes `prototype_2d_result.png`. v2 runs a neutral and an acidic scenario at 8 °C and writes `prototype_2d_v2_ph_comparison.png`.
+- Simplifications: no porosity feedback, uniform biomass and reactive area, and illustrative (uncalibrated) transport coefficients. The plume shapes show behaviour, not magnitudes.
+- Known issue (v2): the pH factor is computed from `PH` inside the PHREEQC `RATES` block, which returns 0 there, and the minus sign binds before the power. The pH factor is therefore far too large, and the v2 numbers (0.038 mol neutral, 0.018 mol acidic, 48%) are not valid until this is fixed and the scenarios are rerun.
 
 ## The physical picture
 
@@ -116,9 +130,9 @@ Confirmed by our own ±20% sweeps in `Sensitivity/` (peak calcite shift from bas
 - **Low (alpine) temperature adaptation** (`alpine temperature/`) — an Arrhenius correction on $R_{max}$ (the `TC` variable, available in PHREEQC's `RATES` BASIC) plus temperature-dependent biomass survival; not considered in the original paper at all.
 - **Alpine soil properties** (silty sand) — incorporated directly into `MICP_Simulation_T3B.py`.
 - **Mechanistic attached-biomass term** (`biomass/`) — a colloid-filtration-theory refit of $C_b(x)$, as an alternative to the original unconstrained cubic fit.
-- **2D model prototype** (`2D prototype/`) — early extension beyond the original paper's 1D column.
+- **2D model prototype** (`2D prototype/`) — a proof of concept for a point injection on a 5×5 grid (operator splitting: Python transport, PHREEQC local chemistry). v1 shows the plume spreading; v2 adds an Arrhenius temperature factor and a Gaussian pH factor. Not calibrated or validated, see below.
 
-Still outside scope: unsaturated flow conditions (would need the Faeli et al. approach) and the acidic pH typical of alpine soils (4.5–6), both left for future work.
+Still outside scope: unsaturated flow conditions (would need the Faeli et al. approach) and a validated treatment of the acidic pH typical of alpine soils (4.5–6). Acidic soil appears only as a first scenario in the 2D prototype (v2), with an extrapolated pH curve and no chemical buffer.
 
 ## Bug fixed in our `phreeqc.dat`
 
